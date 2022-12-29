@@ -2,7 +2,13 @@ import { IProduct } from "../product/product.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { updateLocalStorage } from "../localStorage";
 
-const favoritesItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+const isServer = typeof window === "undefined";
+
+let favoritesItems: IProduct[] = [];
+
+if (!isServer) {
+  favoritesItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+}
 
 const initialState: IProduct[] = favoritesItems;
 

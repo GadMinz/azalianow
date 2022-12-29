@@ -1,8 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICartProduct } from "../product/product.types";
-import {updateLocalStorage} from "../localStorage";
+import { updateLocalStorage } from "../localStorage";
 
-const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+const isServer = typeof window === "undefined";
+
+let cartItems: ICartProduct[] = [];
+
+if (!isServer) {
+  cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+}
 
 const initialState: ICartProduct[] = cartItems;
 
@@ -17,7 +23,7 @@ export const cartSlice = createSlice({
     removeCartItem: (state, action: PayloadAction<{ id: number }>) => {
       const newState = state.filter((p) => p.id !== action.payload.id);
       updateLocalStorage("cart", newState);
-      return newState
+      return newState;
     },
   },
 });
