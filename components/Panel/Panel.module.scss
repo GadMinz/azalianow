@@ -1,0 +1,23 @@
+.panel {
+  height: 460px;
+  width: 325px;
+  display: flex;
+  flex-direction: column;
+  &_title {
+    h2 {
+      font-size: 28px;
+      font-weight: 500;
+      margin-top: 25px;
+    }
+    button {
+      font-family: Roboto, sans-serif;
+      margin-top: 20px;
+      margin-bottom: 35px;
+    }
+  }
+  &_banners {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

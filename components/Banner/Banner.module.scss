@@ -1,0 +1,72 @@
+@import "../../styles/variables";
+.banner {
+  display: flex;
+  height: 140px;
+  font-weight: 400;
+  font-size: 15px;
+  gap: 10px;
+  &_dark {
+    background-color: #636b7f;
+    color: $text-tertiary;
+    .banner_select {
+      opacity: 0.8;
+      &::before {
+        opacity: 0.1;
+      }
+    }
+    img {
+      order: -1;
+    }
+  }
+  &_light {
+    background-color: $border-primary;
+    .banner_select {
+      opacity: 0.5;
+    }
+    img {
+      order: 1;
+    }
+  }
+  &_content {
+    flex: 1;
+    padding: 22px 0 0 15px;
+  }
+  &_discount {
+    display: inline-block;
+    background-color: #ffdc38;
+    font-weight: 700;
+    font-size: 15px;
+    color: $text-primary;
+    padding: 3px 8px;
+    transform: skew(150deg);
+    span {
+      display: inline-block;
+      transform: skewX(-150deg);
+    }
+  }
+  &_text {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+  }
+  &_select {
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: 500;
+    font-size: 11px;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    &::before {
+      content: "";
+      height: 20px;
+      width: 20px;
+      position: absolute;
+      border-radius: 50%;
+      top: -3px;
+      right: -15px;
+      border: 2px solid #ffffff;
+      z-index: -1;
+    }
+  }
+}
