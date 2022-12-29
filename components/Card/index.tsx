@@ -2,11 +2,22 @@
 import { useState } from "react";
 import s from "./Card.module.scss";
 import Image from "next/image";
+import { IProduct } from "../../store/product/product.types";
 
-interface IndexProps {}
+interface IndexProps {
+  product: IProduct;
+}
+function declOfNum(number: number, words: string[]) {
+  return words[
+    number % 100 > 4 && number % 100 < 20
+      ? 2
+      : [2, 0, 1, 1, 1, 2][number % 10 < 5 ? Math.abs(number) % 10 : 5]
+  ];
+}
 
-const Index: React.FC<IndexProps> = ({}) => {
+const Index: React.FC<IndexProps> = ({ product }) => {
   const [count, setCount] = useState<number>(1);
+  const { id, title, price, category, image, rating } = product;
 
   return (
     <div className={s.card}>
@@ -14,13 +25,13 @@ const Index: React.FC<IndexProps> = ({}) => {
         <Image
           width={220}
           height={220}
-          src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
+          src={image}
           alt="photo"
           style={{ objectFit: "contain" }}
         />
       </div>
       <div className={s.card_info}>
-        <div className={s.card_info_category}>electronics</div>
+        <div className={s.card_info_category}>{category}</div>
         <div className={s.card_info_rating}>
           <div className={s.card_info_rating_stars}>
             <div className={s.card_info_rating_stars_disable}>
@@ -32,7 +43,7 @@ const Index: React.FC<IndexProps> = ({}) => {
             </div>
             <div
               className={s.card_info_rating_stars_active}
-              style={{ width: "80%" }}
+              style={{ width: `${rating.rate * 20}%` }}
             >
               <span className={s.card_info_rating_stars_active_item}></span>
               <span className={s.card_info_rating_stars_active_item}></span>
@@ -41,12 +52,15 @@ const Index: React.FC<IndexProps> = ({}) => {
               <span className={s.card_info_rating_stars_active_item}></span>
             </div>
           </div>
-          <div className={s.card_info_rating_count}>2 отзыва</div>
+          <div className={s.card_info_rating_count}>
+            {rating.count}{" "}
+            {declOfNum(rating.count, ["отзыв", "отзыва", "отзывов"])}
+          </div>
         </div>
       </div>
-      <div className={s.card_title}>Mens Casual Premium Slim Fit T-Shirts</div>
+      <div className={s.card_title}>{title}</div>
       <div className={s.card_price}>
-        {Math.ceil(55.99 * 70)} ₽ <span>/шт.</span>
+        {Math.ceil(price * 70)} ₽ <span>/шт.</span>
       </div>
       <div className={s.card_buttons}>
         <div className={s.card_buttons_cart}>
