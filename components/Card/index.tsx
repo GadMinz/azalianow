@@ -3,6 +3,8 @@ import { useState } from "react";
 import s from "./Card.module.scss";
 import Image from "next/image";
 import { IProduct } from "../../store/product/product.types";
+import { useActions } from "../../hooks/useActions";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 interface IndexProps {
   product: IProduct;
@@ -16,8 +18,13 @@ function declOfNum(number: number, words: string[]) {
 }
 
 const Index: React.FC<IndexProps> = ({ product }) => {
+  const { addCartItem, removeCartItem } = useActions();
+  const { cart } = useTypedSelector((state) => state);
+
   const [count, setCount] = useState<number>(1);
   const { id, title, price, category, image, rating } = product;
+
+  const isExistInCart = cart.some((p) => p.id === id);
 
   return (
     <div className={s.card}>
@@ -63,29 +70,44 @@ const Index: React.FC<IndexProps> = ({ product }) => {
         {Math.ceil(price * 70)} ₽ <span>/шт.</span>
       </div>
       <div className={s.card_buttons}>
-        <div className={s.card_buttons_cart}>
-          <button className={s.card_buttons_cart_add}>В корзину</button>
-          <div className={s.card_buttons_cart_count}>
+        {isExistInCart ? (
+          <button
+            className={s.card_buttons_cart_delete}
+            onClick={() => removeCartItem({ id })}
+          >
+            В корзине
+          </button>
+        ) : (
+          <div className={s.card_buttons_cart}>
             <button
-              disabled={count === 1}
-              onClick={() => setCount((prev) => prev - 1)}
+              className={s.card_buttons_cart_add}
+              onClick={() => addCartItem({ ...product, count })}
             >
-              <svg viewBox="0 0 24 24">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
+              В корзину
             </button>
-            <span>{count}</span>
-            <button
-              disabled={count === 99}
-              onClick={() => setCount((prev) => prev + 1)}
-            >
-              <svg viewBox="0 0 24 24">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </button>
+            <div className={s.card_buttons_cart_count}>
+              <button
+                disabled={count === 1}
+                onClick={() => setCount((prev) => prev - 1)}
+              >
+                <svg viewBox="0 0 24 24">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+              <span>{count}</span>
+              <button
+                disabled={count === 99}
+                onClick={() => setCount((prev) => prev + 1)}
+              >
+                <svg viewBox="0 0 24 24">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
+
         <button className={s.card_buttons_favorite}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
