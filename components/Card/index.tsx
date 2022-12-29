@@ -18,14 +18,23 @@ function declOfNum(number: number, words: string[]) {
 }
 
 const Index: React.FC<IndexProps> = ({ product }) => {
-  const { addCartItem, removeCartItem } = useActions();
-  const { cart } = useTypedSelector((state) => state);
+  const { addCartItem, removeCartItem, addFavoritesItem, removeFavoritesItem } =
+    useActions();
+  const { cart, favorites } = useTypedSelector((state) => state);
 
   const [count, setCount] = useState<number>(1);
   const { id, title, price, category, image, rating } = product;
 
   const isExistInCart = cart.some((p) => p.id === id);
+  const isExistInFavorites = favorites.some((p) => p.id === id);
 
+  const toggleFavorites = () => {
+    if (isExistInFavorites) {
+      removeFavoritesItem({ id });
+      return;
+    }
+    addFavoritesItem(product);
+  };
   return (
     <div className={s.card}>
       <div className={s.card_photo}>
@@ -108,7 +117,12 @@ const Index: React.FC<IndexProps> = ({ product }) => {
           </div>
         )}
 
-        <button className={s.card_buttons_favorite}>
+        <button
+          className={`${s.card_buttons_favorite} ${
+            isExistInFavorites ? s.active : ""
+          }`}
+          onClick={toggleFavorites}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
