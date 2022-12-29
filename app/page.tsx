@@ -4,6 +4,7 @@ import Card from "../components/Card";
 import Panel from "../components/Panel";
 import { useGetProductsQuery } from "../store/product/product.api";
 import { IProduct } from "../store/product/product.types";
+import LoadingBlock from "../components/LoadingBlock";
 
 const Home = () => {
   const { data, isLoading, error } = useGetProductsQuery();
@@ -14,7 +15,7 @@ const Home = () => {
         <div className={s.cards}>
           <Panel title="Всё для комфортной работы" />
           {isLoading ? (
-            <div>Загрузка...</div>
+            [...new Array(9)].map((_, i) => <LoadingBlock key={i} />)
           ) : error ? (
             <div>Ошибка получения товаров</div>
           ) : (
