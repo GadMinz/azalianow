@@ -37,6 +37,13 @@ const Index: React.FC<IndexProps> = ({ product }) => {
   };
   return (
     <div className={s.card}>
+      {(rating.count > 300) &&
+      (
+        <div className={s.card_hit}>
+          <div className={s.card_hit_dark}></div>
+          <span>Хит</span>
+        </div>
+      )}
       <div className={s.card_photo}>
         <Image
           width={220}
