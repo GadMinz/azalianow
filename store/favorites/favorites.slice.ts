@@ -1,7 +1,10 @@
-import {IProduct} from "../product/product.types";
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { IProduct } from "../product/product.types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { updateLocalStorage } from "../localStorage";
 
-const initialState: IProduct[] = [];
+const favoritesItems = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+const initialState: IProduct[] = favoritesItems;
 
 export const favoritesSlice = createSlice({
   name: "favorites",
@@ -9,9 +12,12 @@ export const favoritesSlice = createSlice({
   reducers: {
     addFavoritesItem: (state, action: PayloadAction<IProduct>) => {
       state.push(action.payload);
+      updateLocalStorage("favorites", state);
     },
     removeFavoritesItem: (state, action: PayloadAction<{ id: number }>) => {
-      return state.filter((p) => p.id !== action.payload.id);
+      const newState = state.filter((p) => p.id !== action.payload.id);
+      updateLocalStorage("favorites", newState);
+      return newState;
     },
   },
 });
